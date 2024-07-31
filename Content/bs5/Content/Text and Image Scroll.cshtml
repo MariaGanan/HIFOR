@@ -3,7 +3,7 @@
   /* This Template is used in ca. 5 Views which show title, text and image */
 
   // define dom attribute for fancybox
-  var fancyboxAttribute = "app-content-fancybox-group"; 
+  var fancyboxAttribute = "app-content-fancybox-group";
   var isTextFirst = Settings.TextFirst;
 
   // Determine the widths of each part, based on 12 Bootstrap columns
@@ -24,29 +24,35 @@
 @foreach (var item in allItems) {
   var rowClass = ++itemIndex == itemsCount ? "mb-4 mb-lg-5" : ""; // if last item, add class to the row to add margin-bottom
 
-  <div class='row @rowClass' @Edit.TagToolbar(item)>
+  <div class='row @rowClass text-image-w-scroll align-items-center' @Edit.TagToolbar(item, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+list"})>
     <div class='col-md-@colsText order-md-@(isTextFirst ? "first" : "last")'>
-      @* call sub-template to show the title with the correct H1-H6 tag *@
-      @Html.Partial("../shared/Header tag.cshtml", new { Item = item, HeadingType = item.Presentation.HeadingType })
-
-      @if (showImgBetweenTitleAndText) {
-        @Html.Partial("Text and Image.Part-Image.cshtml", new { Item = item })
-      }
-
-      @Html.Raw(item.Text)
+        @* call sub-template to show the title with the correct H1-H6 tag *@
+        @Html.Partial("../shared/Header tag.cshtml", new { Item = item, HeadingType = item.Presentation.HeadingType })
+        @if (item.Subtitle != "" && item.Subtitle != null) {
+          <h4 class="title mb-2 mb-md-4">@item.Subtitle</h4>
+        }
+        @if (showImgBetweenTitleAndText) {
+            @Html.Partial("Text and Image.Part-Image.cshtml", new { Item = item })
+        }
+        @Html.Raw(item.Text)
     </div>
 
     @* If the image has it's own column, it's here *@
     @if (!showImgBetweenTitleAndText) {
       <div class='col-md-@colsImg order-md-@(!isTextFirst ? "first" : "last")'>
         @* call sub-template to show the image with all possible options *@
-        @Html.Partial("Text and Image.Part-Image.cshtml", new { Item = item, Columns = colsImg, FancyboxAttribute = fancyboxAttribute})
+        <div class="image-content pos-@item.BackImagePosition scroll-@item.Scroll">
+          <img class="main-image" src="@item.Image" alt="@item.Title"/>
+          <img class="bg-image " src="@item.BackImage" alt="background-image"/>
+        </div>
       </div>
     }
   </div>
-
-  if (!Header.AlternatePositions) { continue; }
-  isTextFirst = !isTextFirst;
+  
+  @* If the header has AlternatePositions, switch the order of title/text for the next item *@
+  if (Header.AlternatePositions) {
+    isTextFirst = !isTextFirst;
+  }
 }
 
 @Html.Partial("../shared/Assets.cshtml", new { parts = "scripts"})

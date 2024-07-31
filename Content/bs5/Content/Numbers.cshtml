@@ -1,0 +1,38 @@
+@inherits Custom.Hybrid.Razor14
+
+<div class="numbers" @Edit.TagToolbar(Content, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace"})>
+    <div class="image">
+        <img src="@Content.Image" />
+    </div>
+    <div class="content">
+        <div class="title">
+            <h3>@Content.Title</h3>
+        </div>
+        <div class="numbers-content row">
+            <div class="col-12 col-md-4 number-item">
+                <div class="number">
+                    @Content.Number
+                </div>
+                <div class="number-text">
+                    @Html.Raw(@Content.Text)
+                </div>
+            </div>
+            <div class="col-12 col-md-4 number-item">
+                <div class="number">
+                    @Content.Number2
+                </div>
+                <div class="number-text">
+                    @Html.Raw(@Content.Text2)
+                </div>
+            </div>
+            <div class="col-12 col-md-4 number-item">
+                <div class="number">
+                    @Content.Number3
+                </div>
+                <div class="number-text">
+                    @Html.Raw(@Content.Text3)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
