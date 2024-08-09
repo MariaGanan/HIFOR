@@ -1,0 +1,57 @@
+@inherits Custom.Hybrid.Razor14
+@using ToSic.Razor.Blade;
+@{
+  // get helper commands
+  var linkHelper = CreateInstance("LinkHelper.cs");
+}
+
+<div class="row slider-partners">
+  <div class="col-12 d-flex title justify-content-center">
+    <h3>@Resources.TitleSlider</h3>
+  </div>
+  <div class="flexslider partners-slider col-md-8 offset-md-2 text-center">
+    <ul class="slides">
+      @foreach (var link in AsList(Data)) {
+        var linkInfo = linkHelper.LinkInfos(link);
+        <li>
+          <div class="co-linkblock" @Edit.TagToolbar(link, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
+            @if (linkInfo.Found) {
+                @:<a href="@link.Link" target="@linkInfo.Window" title="@link.Title">
+            }
+            @if (Text.Has(link.Image)) {
+                <div class="effect-zoom">
+                    <img src="@link.Image" alt="@link.Title"/>
+                </div>
+            } else {
+                <div class="bg-primary placeholder"></div>
+            }
+            
+            @if (linkInfo.Found) {
+                @:</a>
+            }
+          </div>
+        </li>
+      }
+    </ul>
+  </div>
+  <div class="col-12 button d-flex justify-content-center">
+    <a class="btn btn-secondary" href="@Resources.ButtonUrl"> @Resources.ButtonText </a>
+  </div>
+</div>
+
+@Html.Partial("../shared/Assets.cshtml", new { parts = "scripts,icons"})
+
+<script>
+    // Can also be used with $(document).ready()
+    $(window).load(function () {
+        $('.flexslider.partners-slider').flexslider({
+            animation: "slide",
+            controlNav: false,
+            directionNav: true,
+            itemWidth:150,
+            itemMargin: 40, 
+            maxItems: 3,
+            minItems: 1
+        });
+    });
+</script>

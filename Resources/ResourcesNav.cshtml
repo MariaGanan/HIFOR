@@ -1,0 +1,19 @@
+
+@inherits Custom.Hybrid.Razor14
+@using System.Collections.Generic
+@using ToSic.Razor.Blade;
+@using System;
+@* This inherits statement gets you features like App, CmsContext, Data etc. - you can delete this comment *@
+<link rel="stylesheet" href="@App.Path/Styles.css" data-EnableOptimizations="true" />
+
+@{
+    var categories = AsList(Data);
+}
+
+<div class="categories-nav">
+
+    <span>@Resources.GoToLabel</span>
+    @foreach (var cat in categories){
+        <a href="#@cat.UrlKey"><span>@cat.Title</span></a>
+    }
+</div>

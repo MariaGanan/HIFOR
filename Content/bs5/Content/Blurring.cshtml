@@ -1,0 +1,73 @@
+@inherits Custom.Hybrid.Razor14
+@{
+  var allItems = AsList(Data);
+  var itemsCount = allItems.Count();
+  var itemIndex = 0;
+}
+
+
+
+<div class="dg-image-carrousel">
+@* Show all the content-items - one or more *@
+@foreach (var item in allItems) {
+    if (itemIndex == 0){
+        <div class='image active' style="background-image: url('@item.Image')" @Edit.TagToolbar(item, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
+            <div class="content">
+                <div class="subtitle">@item.Subtitle</div>
+                <h4>@item.Title</h4>
+                <div class="text">@Html.Raw(item.Text)</div>
+            </div>
+        </div>
+    } else {
+  <div class='image' style="background-image: url('@item.Image')" @Edit.TagToolbar(item, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
+
+
+  </div>
+  }
+  itemIndex = itemIndex+1;
+}
+</div>
+
+@Html.Partial("../shared/Assets.cshtml", new { parts = "scripts"})
+
+<script>
+// script.js
+document.addEventListener('scroll', handleScroll);
+
+function handleScroll() {
+    const images = document.querySelectorAll('.dg-image-carrousel .image');
+    const carrousel = $('.dg-image-carrousel');
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const viewHeight = window.innerHeight;
+
+    images.forEach((image, index) => {
+        const imageTop = index * viewHeight;
+        const nextImageTop = (index + 1) * viewHeight;
+
+        if (scrollTop >= imageTop && scrollTop < nextImageTop) {
+            const progress = (scrollTop - imageTop) / viewHeight;
+            console.log(progress);
+            const blurAmount = progress * 20; // Ajustar el valor según el efecto deseado
+          if (images[index + 1]) {
+              $('.dg-image-carrousel').removeClass("transition-ended");
+              image.style.filter = `blur(${blurAmount}px)`;
+              if(progress * 100 > 5){
+                images[index + 1].style.zIndex = 1;  
+              }
+              images[index + 1].style.filter = 'blur(0px)';
+              let translateY = 100 - (progress * 100);
+              if(translateY < 5){
+                translateY = 0;
+              }
+              images[index + 1].style.transform = `translateY(${translateY}%)`;
+              images[index + 1].classList.add('active');
+            }
+          else{
+            console.log("Fin del slider");
+            $('.dg-image-carrousel').addClass("transition-ended");
+          }
+        }
+    });
+}
+
+</script>

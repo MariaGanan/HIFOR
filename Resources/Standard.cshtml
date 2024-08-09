@@ -1,0 +1,60 @@
+@inherits Custom.Hybrid.Razor14
+@using System.Collections.Generic
+@using ToSic.Razor.Blade;
+@using System;
+@* This inherits statement gets you features like App, CmsContext, Data etc. - you can delete this comment *@
+<link rel="stylesheet" href="@App.Path/Styles.css" data-EnableOptimizations="true" />
+
+ @{
+    var index = 0;          
+}
+
+@*TOP BANNER*@
+<div class="standard">
+        
+   @*ITEMS BY CATEGORY*@
+    @foreach(var category in AsList(Data)){
+        <div class="standard-category" @Edit.TagToolbar(category, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
+            <div id="@category.UrlKey" class="header row">
+                <h3 class="col-12">@category.Title</h3>
+                <div class="cat-description col-md-6">
+                    @Html.Raw(category.Text)
+                </div>
+            </div>
+
+            <div class="items">
+                @foreach (var item in category.Items){
+                    var expand = false;
+                        if(index == 0){
+                            expand = true;
+                        } else {
+                            expand = false;
+                        }
+                    <div class="accordion-item item-@item.EntityId" data-title="@item.EntityId"  
+                    @Edit.TagToolbar(item, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
+                        <div class="accordion-header" id="heading-@index">
+                            <button id="@item.EntityId" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@index" aria-expanded="@expand" aria-controls="@index">
+                                    <h6>@item.Title</h6>
+                            </button>
+                        </div>
+                            <div id="collapse-@index" class="accordion-collapse collapse collapse-@item.EntityId" aria-labelledby="heading-@index" data-bs-parent="accordion-@category.EntityId">
+                                <div class="accordion-content">
+                                    <h5>@item.Subtitle</h5>
+                                    <div class="text-content row">
+                                        <div class="col-12 col-md-6">
+                                            @Html.Raw(item.TextCol1)
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            @Html.Raw(item.TextCol2)
+                                        </div>
+                                    </div>
+                                    <a class="btn btn-secondary standard-button" href="@item.Document" target="_blank">@Resources.ButtonLabel <img src="/Portals/_default/skins/skin_hifor/images/download.svg"/></a>
+                                </div>
+                            </div>
+                        </div>
+                        index = index + 1;                               
+                }
+            </div>
+        </div>
+    }
+</div>

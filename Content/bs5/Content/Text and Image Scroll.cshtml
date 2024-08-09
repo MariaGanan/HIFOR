@@ -1,4 +1,5 @@
 @inherits Custom.Hybrid.Razor14
+@using ToSic.Razor.Blade;
 @{
   /* This Template is used in ca. 5 Views which show title, text and image */
 
@@ -16,20 +17,21 @@
   var itemsCount = allItems.Count();
   var itemIndex = 0;
 }
-
 @* Show list header if necessary for configuration *@
 @Html.Partial("../shared/Content List Header.cshtml")
 
 @* Show all the content-items - one or more *@
 @foreach (var item in allItems) {
   var rowClass = ++itemIndex == itemsCount ? "mb-4 mb-lg-5" : ""; // if last item, add class to the row to add margin-bottom
-
-  <div class='row @rowClass text-image-w-scroll align-items-center' @Edit.TagToolbar(item, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+list"})>
+<div id="image-scroll">
+  <div class='row @rowClass text-image-w-scroll align-items-center' @Edit.TagToolbar(item, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
     <div class='col-md-@colsText order-md-@(isTextFirst ? "first" : "last")'>
         @* call sub-template to show the title with the correct H1-H6 tag *@
         @Html.Partial("../shared/Header tag.cshtml", new { Item = item, HeadingType = item.Presentation.HeadingType })
         @if (item.Subtitle != "" && item.Subtitle != null) {
           <h4 class="title mb-2 mb-md-4">@item.Subtitle</h4>
+        } else {
+          <h4 class="mb-2 mb-md-4"></h4>
         }
         @if (showImgBetweenTitleAndText) {
             @Html.Partial("Text and Image.Part-Image.cshtml", new { Item = item })
@@ -43,12 +45,14 @@
         @* call sub-template to show the image with all possible options *@
         <div class="image-content pos-@item.BackImagePosition scroll-@item.Scroll">
           <img class="main-image" src="@item.Image" alt="@item.Title"/>
-          <img class="bg-image " src="@item.BackImage" alt="background-image"/>
+          @if(Text.Has(item.BackImage)){
+            <img class="bg-image " src="@item.BackImage" alt="background-image"/>
+          }
         </div>
       </div>
     }
   </div>
-  
+</div>  
   @* If the header has AlternatePositions, switch the order of title/text for the next item *@
   if (Header.AlternatePositions) {
     isTextFirst = !isTextFirst;
@@ -57,3 +61,39 @@
 
 @Html.Partial("../shared/Assets.cshtml", new { parts = "scripts"})
 @Html.Partial("../shared/FancyboxAssets.cshtml", new { FancyboxAttribute = fancyboxAttribute })
+
+
+<script>
+$(document).ready(function(){
+  $('.bg-image').scrolly([
+{
+	to: 'con-top',
+	css:{
+		top:'0',
+		bottom: '',
+		position: 'absolute'
+	}
+},
+{
+	from: 'con-top',
+	to: 'con-bottom - 100el = vp-top',
+	css:{
+		top: '0',
+		bottom: '',
+		position: 'fixed'
+		
+	}
+},
+{	
+	from: 'con-bottom - 100el = vp-top',
+	css:{
+		top: '',
+		bottom: '0',
+		position: 'absolute'
+	}
+}
+], $('.text-image-w-scroll'));
+});
+
+
+</script>

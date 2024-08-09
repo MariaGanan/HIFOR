@@ -1,0 +1,57 @@
+@inherits Custom.Hybrid.Razor14
+@using ToSic.Razor.Blade;
+
+<div class="slider normal" @Edit.TagToolbar(Content, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
+    <div class="title">
+        <h2>@Content.Title</h2>
+    </div>
+    <div id="NormalSlider" style="width: 90%; display: inline-block;">
+      @foreach (var slide in AsList(Content.Slides)) {
+          <div class="item" @Edit.TagToolbar(slide, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
+            @if(Text.Has(slide.Image)){
+              <div class="item-img">
+                <img src="@slide.Image" alt="@slide.Title" />
+              </div>
+            } else {
+              <div class="no-img"></div>
+            }
+            <div class="item-text">
+            @Html.Raw(slide.Text)
+            </div>
+          </div>
+      }
+  </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+      $('#NormalSlider').slick({
+        centerMode: true,
+        centerPadding: '70px',
+        slidesToShow: 3,
+        adaptativeHeight: false,
+        responsive: [
+            {
+            breakpoint: 768,
+            settings: {
+                arrows: true,
+                centerMode: true,
+                centerPadding: '40px',
+                slidesToShow: 1
+            }
+            },
+            {
+            breakpoint: 480,
+            settings: {
+                arrows: true,
+                centerMode: true,
+                centerPadding: '40px',
+                slidesToShow: 1
+            }
+            }
+        ]
+      });
+    });
+  </script>

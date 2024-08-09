@@ -1,34 +1,109 @@
 @inherits Custom.Hybrid.Razor14
 @using ToSic.Razor.Blade;
-@{
-  /* This is used in two views */
-  var isRound = CmsContext.View.Identifier == "round";
 
-  var aspectRatio = isRound ? "1" : "1:1.25";
-  var photoSettings = Kit.Image.Settings("PersonPhoto", aspectRatio: aspectRatio);
 
-  var mbClass = isRound ? "mb-2" : "";
-  var imgClass = isRound ? "rounded-circle" : "";
 
-  var placeholderStyle = "padding-bottom: " + (isRound ? "100%;" : "125%");
-  
-}
-<div class="row">
+<div class="row staff">
   @foreach (var person in AsList(Data)) {
-    <div class="col-md-6 mb-4 mb-md-5 row" @Edit.TagToolbar(person)>
-      <div class="col-4 @mbClass">
+    <div class="person Click-here col-md-6 col-lg-4 mb-4 mb-md-5 row justify-content-center" data-title="@person.EntityId" @Edit.TagToolbar(person, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
+      <div class="image @person.Shape">
         @if (Text.Has(person.Photo)) {
-          @Kit.Image.Picture(person.Field("Photo") , settings: photoSettings, imgClass:"img-fluid " + imgClass, imgAltFallback: person.FullName)        
+            <img class="shape-@person.Shape" src="@person.Photo"/>
         } else {
-          <div class="bg-primary placeholder @imgClass" style="@placeholderStyle"></div>
+          <div class="bg-placeholder shape-@person.Shape"></div>
         }
       </div>
-
-      <div class="col-8" itemscope itemtype="http://schema.org/Person">
-        @Html.Partial("Part Properties.cshtml", new { data = person })
+      <div class="content-person text-center">
+        <div class="h5 mt-4 name">@person.FullName</div>
+        @if (Text.Has(person.Position)) {
+          <div class="mb-2 position">@person.Position</div>
+        }
       </div>
     </div>
+    <div class="custom-model-main container person-@person.EntityId">
+      <div class="custom-model-inner">        
+      <div class="close-btn">×</div>
+          <div class="custom-model-wrap">
+              <div class="pop-up-content-wrap person row">
+              <div class="col-lg-4 left-content">
+                <div class="image @person.Shape">
+                  @if (Text.Has(person.Photo)) {
+                      <img class="shape-@person.Shape" src="@person.Photo"/>
+                  } else {
+                    <div class="bg-placeholder shape-@person.Shape"></div>
+                  }
+                </div>
+                <div class="social-media d-flex">
+                @if (Text.Has(person.Linkedin)) {
+                  <div class="linkedin">
+                    <a href='@person.Linkedin' class="telephone">
+                      <i class="fab fa-linkedin-in text-center" style="width:30px;" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                }
+                @if (Text.Has(person.Phone)) {
+                  <div class="telephone">
+                    <a href='tel:@person.Phone.Replace(" ", "")' class="telephone">
+                      <i class="fas fa-phone text-center" style="width:30px;" aria-hidden="true"></i>
+                    </a>
+                  </div>
+                }
+                @if (Text.Has(person.Email)) {
+                  <div class="email">
+                    <a href='mailto:@person.Email' class="telephone">
+                      <i class="fas fa-envelope text-center" style="width:30px;"></i>
+                    </a>
+                  </div>
+                }
+                </div>
+
+              </div>
+              <div class="col-lg-8 model-content">
+                <div class="h5 mt-4 name">@person.FullName</div>
+                @if (Text.Has(person.Position)) {
+                  <div class="mb-2 position">@person.Position</div>
+                }
+                <div class="description">@Html.Raw(person.Description)</div>
+              </div>
+
+              </div>
+          </div>  
+      </div>  
+      <div class="bg-overlay"></div>
+    </div> 
   }
 </div>
 
 @Html.Partial("../shared/Assets.cshtml", new { parts = "scripts,icons"})
+
+<script>
+$( document ).ready(function() {
+    $(".custom-model-main").each(function( index){
+      $('#siteWrapper').append($(this));
+    });
+});
+
+
+
+
+
+$( ".Click-here" ).each(function( index ) {
+  var person = $(this).data("title");
+  $(this).on('click', function(){
+    $(".custom-model-main.person-" + person).addClass('model-open');
+    $("#siteWrapper .site-content").addClass("blurred"); 
+    $("#top-header").addClass("blurred"); 
+    $("#footer").addClass("blurred"); 
+  })
+});
+
+
+$(".close-btn, .bg-overlay").click(function(){
+  $(".custom-model-main").removeClass('model-open');
+
+  $("#siteWrapper .site-content").removeClass("blurred");
+  $("#top-header").removeClass("blurred");
+  $("#footer").removeClass("blurred");
+
+});
+</script>

@@ -22,7 +22,7 @@
 @foreach (var item in allItems) {
   <div class="container-fluid header-content bg-@item.Background">
     <div class="header container row">
-      <div class="col-md-8" @Edit.TagToolbar(item, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+list"})>
+      <div class="col-md-8" @Edit.TagToolbar(item, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
         <div class="text mb-2">
           @Html.Raw(item.Text)
         </div>

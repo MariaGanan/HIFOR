@@ -6,10 +6,9 @@
   var isTextFirst = Settings.TextFirst;
 
   // Determine the widths of each part, based on 12 Bootstrap Cols
-  var colsText = isTextFirst ? Settings.ColsElement1 : 12 - Settings.ColsElement1;
+  var colsText = 0;
   var colsImg = 12 - colsText;
-  var showImgBetweenTitleAndText = colsImg == 0; // if image has 0 columns, it's between title / text
-
+  
   // Prepare items to show, count and index to find the last item (for styling)
   var allItems = AsList(Data);
   var itemsCount = allItems.Count();
@@ -26,24 +25,10 @@
 
   var rowClass = ++itemIndex == itemsCount ? "mb-4 mb-lg-5" : ""; // if last item, add class to the row to add margin-bottom
 
-  <div class='row @rowClass' @Edit.TagToolbar(item)>
-    <div class='col-md-@colsText order-md-@(isTextFirst ? "first" : "last")'>
-      @* call sub-template to show the title with the correct H1-H6 tag *@
-      @Html.Partial("../shared/Header tag.cshtml", new { Item = item, HeadingType = item.Presentation.HeadingType })
-
-      @* If the image doesn't have it's own column, its between title/text *@
-      @if (showImgBetweenTitleAndText) {
-        @Html.Partial("Video.Part-Playback.cshtml", new { Columns = 12, Video = item })
-      }
-
-      @Html.Raw(item.Text)
+  <div class='row content-video' @Edit.TagToolbar(item, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing"})>
+    <div class='video-content'>
+      @Html.Partial("Video.Part-Playback.cshtml", new { Columns = colsImg, Video = item })
     </div>
-    @* If the image has it's own column, it's here *@
-    @if (!showImgBetweenTitleAndText) {
-      <div class='col-md-@colsImg order-md-@(!isTextFirst ? "first" : "last")'>
-        @Html.Partial("Video.Part-Playback.cshtml", new { Columns = colsImg, Video = item })
-      </div>
-    }
   </div>
 
   if (!Header.AlternatePositions) { continue; }

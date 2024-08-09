@@ -23,7 +23,7 @@
 {
   var rowClass = ++itemIndex == itemsCount ? "mb-4 mb-lg-5" : ""; // if last item, add class to the row to add margin-bottom
   <div class='row @rowClass'>
-    <div class='col-md-@cols offset-md-@padding @styling' @Edit.TagToolbar(item, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+list"})>
+    <div class='col-md-@cols offset-md-@padding @styling' @Edit.TagToolbar(item, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
       @* call sub-template to show the title with the correct H1-H6 tag *@
       <div class="title mb-2 mb-md-4">
         @Html.Partial("../shared/Header tag.cshtml", new { Item = item, HeadingType = item.Presentation.HeadingType })

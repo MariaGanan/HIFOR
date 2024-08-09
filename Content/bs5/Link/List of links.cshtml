@@ -11,7 +11,7 @@
       @foreach (var link in AsList(Data)) {
         var linkInfo = linkHelper.LinkInfos(link);
         <li>
-          <div class="co-linkblock" @Edit.TagToolbar(link, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+list"})>
+          <div class="co-linkblock" @Edit.TagToolbar(link, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
             @if (linkInfo.Found)
             {
               @:<a title="@link.Title" href="@link.Link" target="@linkInfo.Window">

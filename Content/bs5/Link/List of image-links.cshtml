@@ -8,7 +8,7 @@
 <div class="row links">
 @foreach (var link in AsList(Data)) {
   var linkInfo = linkHelper.LinkInfos(link);
-  <div class="col-md-6 p-0 co-linkblock" @Edit.TagToolbar(link, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+list"})>
+  <div class="col-md-6 p-0 co-linkblock" @Edit.TagToolbar(link, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
     @if (linkInfo.Found) {
       @:<a href="@link.Link" target="@linkInfo.Window" title="@link.Title">
     }

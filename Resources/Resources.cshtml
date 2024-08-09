@@ -1,0 +1,64 @@
+@inherits Custom.Hybrid.Razor14
+@using System.Collections.Generic
+@using ToSic.Razor.Blade;
+@using System;
+@* This inherits statement gets you features like App, CmsContext, Data etc. - you can delete this comment *@
+<link rel="stylesheet" href="@App.Path/Styles.css" data-EnableOptimizations="true" />
+
+
+@*TOP BANNER*@
+<div class="resources">
+        
+   @*ITEMS BY CATEGORY*@
+    @foreach(var category in AsList(Data)){
+        <div class="resource-category" @Edit.TagToolbar(category, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
+        <div id="@category.UrlKey" class="header row">
+            <h3 class="col-12">@category.Title</h3>
+            <div class="cat-description col-md-6 col-lg-4">
+                @Html.Raw(category.Text)
+            </div>
+        </div>
+
+        <div class="items">
+        @foreach (var item in category.Resources){
+            <div class="item" 
+            @Edit.TagToolbar(item, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
+
+                <a href="@item.DocumentOrLink" target="@item.Window">
+                <div class="item-content">
+                    <div class="item-title">
+                        <h6>@item.Title</h6>
+                    </div>
+                    <div class="item-icon">
+                        
+                        
+                        @if ( !string.IsNullOrEmpty(item.DocumentOrLink) ){
+                            if(item.DocumentOrLink.EndsWith(".pdf") ){
+                                <img src="/Portals/_default/skins/skin_hifor/images/download.svg"/>
+                            } else if (item.DocumentOrLink.EndsWith(".doc") || item.DocumentOrLink.EndsWith(".docx") ){
+                                <img src="/Portals/_default/skins/skin_hifor/images/download.svg"/>
+                            } else if (item.DocumentOrLink.EndsWith(".xls") || item.DocumentOrLink.EndsWith(".xlsx") ){
+                                <img src="/Portals/_default/skins/skin_hifor/images/download.svg"/>
+                            } else if (item.DocumentOrLink.EndsWith(".jpg") || item.DocumentOrLink.EndsWith(".jpeg") || item.DocumentOrLink.EndsWith(".png") ){
+                                <img src="/Portals/_default/skins/skin_hifor/images/download.svg"/>
+                            } else {
+                                <i class="fa-solid fa-up-right-from-square icon-link"></i>
+                            }
+                        }
+                       
+                    </div>
+                    <div class="image">
+                        @if(Text.Has(item.Image) ){
+                        <img src="@item.Image"/>
+                        } else {
+                        <div class="noImage"></div>
+                        }
+                    </div>
+                </div> 
+                 </a> 
+            </div>                                            
+        }
+        </div>
+    </div>
+    }
+</div>

@@ -1,0 +1,40 @@
+@inherits Custom.Hybrid.Razor14
+@using ToSic.Razor.Blade;
+@{
+  // get helper commands
+  var linkHelper = CreateInstance("LinkHelper.cs");
+}
+
+<div class="row grid-partners">
+  <div class="col-12 col-md-8 offset-md-2 d-flex grid-title justify-content-center text-center">
+    <h4>@Resources.TitleGrid</h4>
+  </div>
+  <div class="partners row">
+      @foreach (var link in AsList(Data)) {
+        var linkInfo = linkHelper.LinkInfos(link);
+
+          <div class="co-linkblock col-12 col-md-4" @Edit.TagToolbar(link, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
+            @if (linkInfo.Found) {
+                @:<a href="@link.Link" target="@linkInfo.Window" title="@link.Title">
+            }
+            @if (Text.Has(link.Image)) {
+                <div class="effect-zoom">
+                    <img src="@link.Image" alt="@link.Title"/>
+                </div>
+            } else {
+                <div class="bg-primary placeholder"></div>
+            }
+                <div class="title">
+                    <h6>@link.Title</h6>
+                </div>
+            @if (linkInfo.Found) {
+                @:</a>
+            }
+          </div>
+
+      }
+
+  </div>
+</div>
+
+@Html.Partial("../shared/Assets.cshtml", new { parts = "scripts,icons"})
