@@ -1,9 +1,9 @@
 @inherits Custom.Hybrid.Razor14
 @using ToSic.Razor.Blade;
 
-<div class="slider diamond " @Edit.TagToolbar(Content, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
-    <div class="title col-12">
-        <h2>@Content.Title</h2>
+<div class="slider diamond my-5 " @Edit.TagToolbar(Content, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
+    <div class="title col-12 mt-5 text-center">
+        <h4>@Content.Title</h4>
     </div>
     <hr class="hr-center" />
     <div id="DiamondSlider" style="width: 90%; display: inline-block;">

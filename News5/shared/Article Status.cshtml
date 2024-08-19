@@ -1,0 +1,12 @@
+@inherits Custom.Hybrid.RazorTyped
+@using ToSic.Razor.Blade;
+
+@{
+  var article = MyModel.Item("Article");
+  var helpers = GetCode("Helpers.cs");
+}
+
+<div class="app-alerts">
+  @* "Will publish" / "expired" info for admin *@
+  @helpers.AdminArticleInformation(article)
+</div>

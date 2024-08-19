@@ -1,0 +1,121 @@
+@inherits Custom.Hybrid.RazorTyped
+@using ToSic.Razor.Blade;
+
+@{
+  var listContent = MyItem;
+
+  // Get some helper commands for later on
+  var helpers = GetCode("../shared/Helpers.cs");
+
+  var filteredCategory = AsItems(MyData["Category"]).FirstOrDefault();
+
+  var mainToolbar = Kit.Toolbar.Default()
+    .Edit(operation: "%", tweak: b => b.Note("Edit display settings"))
+    .New("News", tweak: b => b.Prefill("Date=" + DateTime.Now.ToString("yyyy-MM-dd")).Position(1).Color("#15585F").Note("Create a new post"))
+    .Data("News", tweak: b => b.Position(2).Color("#15585F").Note("Manage posts"));
+
+  var articleToolbar = Kit.Toolbar.Empty()
+    .Settings(hover:"left", autoAddMore:"start")
+    .Edit(tweak: b => b.Color("#15585F"))
+    .Delete(tweak: b => b.Color("gray"));
+
+  var isBs3 = Kit.Css.Is("bs3");
+  var col = isBs3 ? "col-xs-12 col-sm-6 col-lg-8" : "col-12 col-md-6 col-lg-8";
+  var col12 = isBs3 ? "col-xs-12" : "col-12";
+  var cl = isBs3 ? "app-news5-image-wrapper-single-col col-xs-12 col-sm-6 col-lg-4" : "mb-3 mb-md-0 col-12 col-md-6 col-lg-4";
+  
+  var itemIndex = 0;
+
+}
+
+@* Show Warning if admin *@
+@if (MyUser.IsContentAdmin) {
+  @helpers.AdminDetailsPageConfigWarning()
+}
+<div class="app-news5 app-news5-list" @mainToolbar.For(MyItem)>
+
+  @* Show category filter if configured *@
+  @if (App.Settings.Bool("ActivateCategories")) {
+    @Html.Partial("../shared/Category Filter.cshtml", new { filteredCategory })
+  }
+
+  @* List the articles *@
+  <div class="container row article-list">
+    @foreach (var article in AsItems(MyData["News"])) {
+      
+      if (itemIndex == 0){
+        <div class="@col12 full-article article" @articleToolbar.For(article)>
+          <div class="app-news5-details-link">
+            <a class="link-overlay" href="@helpers.LinkToDetailsPage(article)"></a>
+            <div class="bg-animation bg-@article.String("HoverColor")"></div>
+            <div class="row">
+              <div class="image col-12">
+                @* Show image or placeholder *@
+                @Html.Partial("../shared/Article Image.cshtml", new { article })
+              </div>
+              
+              <div class="content">
+                @* Show Title, Date, Category, Teaser and read more link *@
+                @Html.Partial("../shared/Article Information.cshtml", new { article, HeadingType = "h4" })
+              </div>
+            </div>
+          </div>
+          @Html.Partial("../shared/Article Status.cshtml", new { article })
+        </div>
+      } else {
+
+        <div class="col-12 col-md-6 col-lg-4 other-articles article" @articleToolbar.For(article)>
+          <div class="app-news5-details-link">
+            <a class="link-overlay" href="@helpers.LinkToDetailsPage(article)"></a>
+            <div class="bg-animation bg-@article.String("HoverColor")"></div>
+            <div class="row">
+              <div class="image col-12">
+                @* Show image or placeholder *@
+                @Html.Partial("../shared/Article Image.cshtml", new { article })
+              </div>
+              <div class="content col-12">
+                @* Show Title, Date, Category, Teaser and read more link *@
+                @Html.Partial("../shared/Article Information.cshtml", new { article, HeadingType = "h5" })
+              </div>
+            </div>
+          </div>
+          @Html.Partial("../shared/Article Status.cshtml", new { article })
+        </div>
+      }
+      itemIndex = itemIndex+1;
+    }
+  </div>
+
+  @* Show pagination if configured *@
+  @if (listContent.Bool("ShowPagination") == true) {
+    @Html.Partial("../shared/List Paging.cshtml")
+  }
+</div>
+
+@Html.Partial("./Assets.cshtml")
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function (event) {
+  // Loop over items (in a IE11 compatible way).
+  var items = document.getElementsByClassName('app-news5-details-link');
+  for (var i = 0; i < items.length; i++) {
+
+    // Loop over the registered event types.
+    ['mouseenter', 'mouseleave'].forEach(function (eventname) {
+      items[i].addEventListener(eventname, function (event) {
+
+        // Reset classes.
+        // event.currentTarget.className = 'item hover';
+        // > If support for IE11 is not needed.
+        // event.currentTarget.classList.remove('mouseenter', 'mouseleave', 'top', 'right', 'bottom', 'left');
+        // > If support for IE11 is needed.
+        event.currentTarget.classList.remove('mouseenter');
+        event.currentTarget.classList.remove('mouseleave');
+        event.currentTarget.className += ' ' + event.type + ' ' ;
+
+      }, false);
+    });
+  }
+});  
+</script>

@@ -11,15 +11,10 @@
 @* Show all the content-items - one or more *@
 @foreach (var item in allItems) {
     if (itemIndex == 0){
-        <div class='image active' style="background-image: url('@item.Image')" @Edit.TagToolbar(item, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
-            <div class="content">
-                <div class="subtitle">@item.Subtitle</div>
-                <h4>@item.Title</h4>
-                <div class="text">@Html.Raw(item.Text)</div>
-            </div>
+        <div class='image active' style="background-image: url('@item.Image')">
         </div>
     } else {
-  <div class='image' style="background-image: url('@item.Image')" @Edit.TagToolbar(item, toolbar: new[] { "toolbar=empty", "+edit", "+new", "+replace", "+add-existing", "+list"})>
+  <div class='image' style="background-image: url('@item.Image')">
 
 
   </div>
@@ -69,5 +64,6 @@ function handleScroll() {
         }
     });
 }
+
 
 </script>

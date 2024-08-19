@@ -1,0 +1,25 @@
+@inherits Custom.Hybrid.RazorTyped
+@using ToSic.Razor.Blade;
+
+@{
+  var article = MyModel.Item("Article");
+  var helpers = GetCode("Helpers.cs");
+  var displayCategories = App.Settings.Bool("ActivateCategories") && AsItems(article.Children("Categories")).Any();
+}
+
+<div class="app-text">
+  <div class="top-info">
+    @if (displayCategories) {
+      <span class="app-news5-categories">
+        @foreach (var cat in article.Children("Categories")) {
+          <a href='@Link.To(parameters: "category=" + cat.String("UrlKey"))'>@cat.String("Name")</a>
+        }
+      </span>
+    }
+    <span class='app-news5-date @(displayCategories ? "app-date-border" : "")'>@article.DateTime("Date").ToString("d")</span>
+  </div>
+  <div class="bottom-info">
+    @((Tag.Custom(MyModel.String("HeadingType"))).Class("app-news5-list").Wrap(article.String("Title")))
+    <span class="app-news5-readmore btn btn-primary disabled">@App.Resources.String("LabelReadMore")</span>
+  </div>
+</div>
