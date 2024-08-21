@@ -1,0 +1,35 @@
+/* LIST */
+
+.portfolio-list{
+
+}
+
+.portfolio-list .project{
+    background-repeat: no-repeat; 
+    background-size: cover;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; 
+    position: relative;
+}
+
+.portfolio-list .project .overlay{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: var(--color-hifor-black);
+  opacity: 0.2;
+  z-index: 1;
+}
+
+.portfolio-list .project .project-content{
+    text-align: center;
+    z-index: 2;
+}
+
+
+.portfolio-list .project .project-content h4, .portfolio-list .project .project-content h6{
+    color: white;
+}

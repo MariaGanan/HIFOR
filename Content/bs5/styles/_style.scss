@@ -537,6 +537,8 @@
 
 
 /* SLIDERS */
+
+/* NORMAL SLIDER */
 .slider.normal{
   justify-content: center;
   display: flex;
@@ -581,6 +583,7 @@
   }
 }
 
+/* DIAMOND SLIDER */
 
 .slider.diamond{
   justify-content: center;
@@ -591,10 +594,10 @@
   .slick-arrow{
     display: none !important;}
 
-.slick-list{
-  position: relative;
-  z-index: 5;
-}
+  .slick-list{
+    position: relative;
+    z-index: 5;
+  }
 
   hr.hr-center{
     position: absolute;
@@ -663,6 +666,22 @@
   }
   
 }
+
+
+/* IMAGE SLIDER GALLERY */
+#ImageSlider{
+  .slick-arrow{
+    
+    &.slick-prev{
+      left: 0;
+    }
+    &.slick-next{
+      right: 0;
+    }
+  }
+}
+
+/* ARROWS SLIDER */
 
 .slick-arrow{
   display: block;

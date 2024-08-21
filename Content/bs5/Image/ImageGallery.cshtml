@@ -10,34 +10,79 @@
 }
 
 <div class="row">
-@foreach (var img in AsList(Data)) {
-  var wrapInLink = img.Presentation.ImageLightbox != false;
+  <div class="slider image-slider text-center">
 
-  var imgField = img.Field("Image");
-  var pic = Kit.Image.Picture(imgField, settings: "Content", factor: factor, imgClass: "w-100", imgAltFallback: img.EntityTitle);
+    <div id="ImageSlider" style="width: 90%; display: inline-block;">
+      @foreach (var img in AsList(Data)) {
+        var wrapInLink = img.Presentation.ImageLightbox != false;
 
-  <div class='@(columns > 10 ? "col-12" : "col-12 col-sm-6") col-lg-@columns py-3' @Edit.TagToolbar(img)>
+        var imgField = img.Field("Image");
+        var pic = Kit.Image.Picture(imgField, settings: "Content", factor: factor, imgClass: "w-100", imgAltFallback: img.EntityTitle);
 
-    @if (wrapInLink) {
-      var lbPic = Kit.Image.Picture(imgField, settings: "Lightbox");
-      var caption = img.Presentation.TitleLightbox != false ? pic.Alt : "";
-      @:<a @fancyboxAttribute data-src="@img.Image" data-srcset="@lbPic.SrcSet" data-sizes="@lbPic.Sizes" data-preload="false" data-caption="@caption">
-    }
-    
-    <figure class='@(img.Presentation.ImageLightbox != false ? "effect-zoom" : "") mb-0'>
-      @if (img.Presentation.TitleLegend != false) {
-        <figcaption class="pt-1 px-3 px-md-4 pb-3 pb-md-4 text-white">@pic.Alt</figcaption>
+        <div class='@(columns > 10 ? "col-12" : "col-12 col-sm-6") col-lg-@columns py-3' @Edit.TagToolbar(img)>
+
+          @if (wrapInLink) {
+            var lbPic = Kit.Image.Picture(imgField, settings: "Lightbox");
+            var caption = img.Presentation.TitleLightbox != false ? pic.Alt : "";
+            @:<a @fancyboxAttribute data-src="@img.Image" data-srcset="@lbPic.SrcSet" data-sizes="@lbPic.Sizes" data-preload="false" data-caption="@caption">
+          }
+          
+          <figure class='@(img.Presentation.ImageLightbox != false ? "effect-zoom" : "") mb-0'>
+            @if (img.Presentation.TitleLegend != false) {
+              <figcaption class="pt-1 px-3 px-md-4 pb-3 pb-md-4 text-white">@pic.Alt</figcaption>
+            }
+            @pic
+          </figure>
+
+          @if (wrapInLink) {
+            @:</a>
+          }
+
+        </div>
       }
-      @pic
-    </figure>
 
-    @if (wrapInLink) {
-      @:</a>
-    }
+
+    </div>
 
   </div>
-}
+
+
 </div>
 
 @Html.Partial("../shared/Assets.cshtml", new { parts = "scripts" })
 @Html.Partial("../shared/FancyboxAssets.cshtml", new { FancyboxAttribute = fancyboxAttribute })
+
+<script type="text/javascript">
+    $(document).ready(function(){
+      $('#ImageSlider').slick({
+        autoplay: true,
+        autoplaySpeed: 5000,
+        centerPadding: '70px',
+        slidesToShow: 3,
+        adaptativeHeight: false,
+        responsive: [
+            {
+            breakpoint: 768,
+            settings: {
+                arrows: true,
+                autoplay: true,
+                autoplaySpeed: 5000,
+                centerPadding: '40px',
+                slidesToShow: 1
+            }
+            },
+            {
+            breakpoint: 480,
+            settings: {
+                arrows: true,
+                autoplay: true,
+                autoplaySpeed: 5000,
+                centerPadding: '40px',
+                slidesToShow: 1
+            }
+            }
+        ]
+      });
+      $("hr.hr-center").appendTo("#DiamondSlider")
+    });
+  </script>
